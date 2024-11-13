@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "419893229562",
+    "project_id": "tester-firebase-app",
+    "storage_bucket": "tester-firebase-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419893229562:android:377b2030cf8d3604575643",
+        "android_client_info": {
+          "package_name": "com.google.firebase.sample.cityreviewer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFMxFPEOQvr2Nfd2Pq5E1qBZOWj6533kE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
