@@ -73,6 +73,7 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
 
     private void onSubmitClicked(View view) {
         Rating rating = new Rating(
+                // TODO: Use this method to get UUID
                 FirebaseAuth.getInstance().getCurrentUser(),
                 mBinding.restaurantFormRating.getRating(),
                 mBinding.restaurantFormText.getText().toString());

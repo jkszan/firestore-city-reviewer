@@ -12,12 +12,7 @@ class EntryChoiceActivity : BaseEntryChoiceActivity() {
                 "Java",
                 "Run the Firestore quickstart written in Java.",
                 Intent(this, com.google.firebase.sample.cityreviewer.java.MainActivity::class.java),
-            ),
-            Choice(
-                "Kotlin",
-                "Run the Firestore quickstart written in Kotlin.",
-                Intent(this, com.google.firebase.sample.cityreviewer.kotlin.MainActivity::class.java),
-            ),
+            )
         )
     }
 }

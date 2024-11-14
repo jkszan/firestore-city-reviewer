@@ -26,7 +26,7 @@ public class Filters {
         filters.setSortBy(Restaurant.FIELD_AVG_RATING);
         filters.setSortDirection(Query.Direction.DESCENDING);
 
-        return filters;
+        return filters;//testing
     }
 
     public boolean hasCategory() {

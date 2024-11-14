@@ -99,6 +99,7 @@ public class MainFragment extends Fragment implements
         // Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
+        // TODO: Use basic strategy with a where clause for user posts/community posts
         // Get ${LIMIT} restaurants
         mQuery = mFirestore.collection("restaurants")
                 .orderBy("avgRating", Query.Direction.DESCENDING)
@@ -262,6 +263,7 @@ public class MainFragment extends Fragment implements
     }
 
     private boolean shouldStartSignIn() {
+        System.err.println(FirebaseAuth.getInstance().getCurrentUser());
         return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
     }
 
