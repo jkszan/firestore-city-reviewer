@@ -8,23 +8,6 @@
     <fragment
         android:id="@+id/MainFragment"
         android:name="com.google.firebase.sample.cityreviewer.java.MainFragment"
-        tools:layout="@layout/fragment_main" >
-        <action
-            android:id="@+id/action_MainFragment_to_RestaurantDetailFragment"
-            app:destination="@id/RestaurantDetailFragment"
-            app:enterAnim="@anim/slide_in_from_right"
-            app:exitAnim="@anim/slide_out_to_left"
-            app:popEnterAnim="@anim/slide_in_from_left"
-            app:popExitAnim="@anim/slide_out_to_right" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/RestaurantDetailFragment"
-        android:name="com.google.firebase.sample.cityreviewer.java.RestaurantDetailFragment"
-        tools:layout="@layout/fragment_restaurant_detail" >
-        <argument
-            android:name="key_restaurant_id"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/fragment_main" />
 
 </navigation>

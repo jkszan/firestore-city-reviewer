@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Friendly Eats</string>
-
+    <string name="value_any_country">All countries</string>
     <string name="value_any_category">All food</string>
     <string name="value_any_city">Anywhere</string>
     <string name="value_any_price">Any price</string>
@@ -10,25 +10,26 @@
     <string name="price_3">$$$</string>
 
     <string name="label_category">Category</string>
+    <string name="label_country">Country</string>
+    <string name="label_author">Author</string>
     <string name="label_city">City</string>
     <string name="label_price">Price</string>
     <string name="label_sort_by">Sort By</string>
 
     <string name="fmt_num_ratings" translatable="false">(%d)</string>
-    <string name="all_restaurants">All Restaurants</string>
+    <string name="all_cities">All Cities</string>
     <string name="header_filters">Filter</string>
     <string name="search">Search</string>
 
     <string name="sort_by_rating">Sort by Rating</string>
-    <string name="sort_by_popularity">Sort by Popularity</string>
-    <string name="sort_by_price">Sort by Price</string>
+    <string name="sort_by_author">Sort by Author</string>
 
-    <string name="sorted_by_rating">sorted by rating</string>
-    <string name="sorted_by_price">sorted by price</string>
-    <string name="sorted_by_popularity">sorted by popularity</string>
+    <string name="sorted_by_rating">Sorted by Rating</string>
+    <string name="sorted_by_author">Sorted by Author</string>
 
     <string name="add_random_items">Add Random Items</string>
     <string name="sign_out">Sign Out</string>
+    <string name="write_review">Write Review</string>
     <string name="divider_bullet">•</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
@@ -62,6 +63,13 @@
         <item>Sushi</item>
     </string-array>
 
+    <string-array name="countries">
+        <item>@string/value_any_country</item>
+        <item>Canada</item>
+        <item>US</item>
+        <item>UK</item>
+        <item>Netherlands</item>
+    </string-array>
     <!-- 50 most populous cities in the US -->
     <string-array name="cities">
         <item>@string/value_any_city</item>
@@ -127,7 +135,6 @@
     <!-- Ways you can sort restaurants -->
     <string-array name="sort_by">
         <item>@string/sort_by_rating</item>
-        <item>@string/sort_by_popularity</item>
-        <item>@string/sort_by_price</item>
+        <item>@string/sort_by_author</item>
     </string-array>
 </resources>

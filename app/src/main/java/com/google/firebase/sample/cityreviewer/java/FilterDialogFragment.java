@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.DialogFiltersBinding;
-import com.google.firebase.sample.cityreviewer.java.model.Restaurant;
+import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.firestore.Query;
 
 /**
@@ -80,9 +80,9 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     }
 
     @Nullable
-    private String getSelectedCategory() {
-        String selected = (String) mBinding.spinnerCategory.getSelectedItem();
-        if (getString(R.string.value_any_category).equals(selected)) {
+    private String getSelectedCountry() {
+        String selected = (String) mBinding.spinnerCountry.getSelectedItem();
+        if (getString(R.string.value_any_country).equals(selected)) {
             return null;
         } else {
             return selected;
@@ -99,28 +99,13 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         }
     }
 
-    private int getSelectedPrice() {
-        String selected = (String) mBinding.spinnerPrice.getSelectedItem();
-        if (selected.equals(getString(R.string.price_1))) {
-            return 1;
-        } else if (selected.equals(getString(R.string.price_2))) {
-            return 2;
-        } else if (selected.equals(getString(R.string.price_3))) {
-            return 3;
-        } else {
-            return -1;
-        }
-    }
-
     @Nullable
     private String getSelectedSortBy() {
         String selected = (String) mBinding.spinnerSort.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
-            return Restaurant.FIELD_AVG_RATING;
-        } if (getString(R.string.sort_by_price).equals(selected)) {
-            return Restaurant.FIELD_PRICE;
-        } if (getString(R.string.sort_by_popularity).equals(selected)) {
-            return Restaurant.FIELD_POPULARITY;
+            return City.FIELD_RATING;
+        } if (getString(R.string.sort_by_author).equals(selected)) {
+            return City.FIELD_AUTHOR;
         }
 
         return null;
@@ -131,10 +116,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         String selected = (String) mBinding.spinnerSort.getSelectedItem();
         if (getString(R.string.sort_by_rating).equals(selected)) {
             return Query.Direction.DESCENDING;
-        } if (getString(R.string.sort_by_price).equals(selected)) {
+        } if (getString(R.string.sort_by_author).equals(selected)) {
             return Query.Direction.ASCENDING;
-        } if (getString(R.string.sort_by_popularity).equals(selected)) {
-            return Query.Direction.DESCENDING;
         }
 
         return null;
@@ -142,9 +125,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
     public void resetFilters() {
         if (mBinding != null) {
-            mBinding.spinnerCategory.setSelection(0);
+            mBinding.spinnerCountry.setSelection(0);
             mBinding.spinnerCity.setSelection(0);
-            mBinding.spinnerPrice.setSelection(0);
             mBinding.spinnerSort.setSelection(0);
         }
     }
@@ -153,9 +135,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         Filters filters = new Filters();
 
         if (mBinding != null) {
-            filters.setCategory(getSelectedCategory());
+            filters.setCountry(getSelectedCountry());
             filters.setCity(getSelectedCity());
-            filters.setPrice(getSelectedPrice());
             filters.setSortBy(getSelectedSortBy());
             filters.setSortDirection(getSortDirection());
         }

@@ -1,5 +1,7 @@
 package com.google.firebase.sample.cityreviewer.java;
 
+import static com.google.android.material.internal.ViewUtils.hideKeyboard;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +24,6 @@ import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.auth.AuthUI;
@@ -34,13 +35,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.FragmentMainBinding;
-import com.google.firebase.sample.cityreviewer.java.adapter.RestaurantAdapter;
-import com.google.firebase.sample.cityreviewer.java.model.Rating;
-import com.google.firebase.sample.cityreviewer.java.model.Restaurant;
-import com.google.firebase.sample.cityreviewer.java.util.RatingUtil;
-import com.google.firebase.sample.cityreviewer.java.util.RestaurantUtil;
+import com.google.firebase.sample.cityreviewer.java.adapter.CityAdapter;
+import com.google.firebase.sample.cityreviewer.java.model.City;
+import com.google.firebase.sample.cityreviewer.java.util.CityUtil;
 import com.google.firebase.sample.cityreviewer.java.viewmodel.MainActivityViewModel;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -49,12 +49,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 public class MainFragment extends Fragment implements
         FilterDialogFragment.FilterListener,
-        RestaurantAdapter.OnRestaurantSelectedListener, View.OnClickListener,
+        CityDialogFragment.ReviewListener,
+        CityAdapter.OnCitySelectedListener, View.OnClickListener,
         MenuProvider {
 
     private static final String TAG = "MainActivity";
@@ -67,7 +67,10 @@ public class MainFragment extends Fragment implements
     private Query mQuery;
 
     private FilterDialogFragment mFilterDialog;
-    private RestaurantAdapter mAdapter;
+
+    private CityDialogFragment mReviewDialog;
+
+    private CityAdapter mAdapter;
 
     private MainActivityViewModel mViewModel;
 
@@ -100,13 +103,13 @@ public class MainFragment extends Fragment implements
         mFirestore = FirebaseFirestore.getInstance();
 
         // TODO: Use basic strategy with a where clause for user posts/community posts
-        // Get ${LIMIT} restaurants
-        mQuery = mFirestore.collection("restaurants")
-                .orderBy("avgRating", Query.Direction.DESCENDING)
+        // Get ${LIMIT} cities
+        mQuery = mFirestore.collection("cities")
+                .orderBy("rating", Query.Direction.DESCENDING)
                 .limit(LIMIT);
 
         // RecyclerView
-        mAdapter = new RestaurantAdapter(mQuery, this) {
+        mAdapter = new CityAdapter(mQuery, this) {
             @Override
             protected void onDataChanged() {
                 // Show/hide content if the query returns empty.
@@ -132,6 +135,7 @@ public class MainFragment extends Fragment implements
 
         // Filter Dialog
         mFilterDialog = new FilterDialogFragment();
+        mReviewDialog = new CityDialogFragment();
     }
 
     @Override
@@ -180,6 +184,10 @@ public class MainFragment extends Fragment implements
             AuthUI.getInstance().signOut(requireContext());
             startSignIn();
             return true;
+        } else if (itemId == R.id.menu_write_review) {
+            //TODO: Write dialog popup for writing a review
+            //mReviewDialog.show(getChildFragmentManager(), CityDialogFragment.TAG);
+            onWriteReviewClicked();
         }
         return false;
     }
@@ -213,33 +221,29 @@ public class MainFragment extends Fragment implements
     }
 
     @Override
-    public void onRestaurantSelected(DocumentSnapshot restaurant) {
-        // Go to the details page for the selected restaurant
-        MainFragmentDirections.ActionMainFragmentToRestaurantDetailFragment action = MainFragmentDirections
-                .actionMainFragmentToRestaurantDetailFragment(restaurant.getId());
-
-        NavHostFragment.findNavController(this)
-                .navigate(action);
+    public void onCitySelected(DocumentSnapshot city) {
+        // Go to the details page for the selected city
+        return;
     }
 
     @Override
     public void onFilter(Filters filters) {
         // Construct query basic query
-        Query query = mFirestore.collection("restaurants");
+        Query query = mFirestore.collection("cities");
 
-        // Category (equality filter)
-        if (filters.hasCategory()) {
-            query = query.whereEqualTo(Restaurant.FIELD_CATEGORY, filters.getCategory());
+        // Country (equality filter)
+        if (filters.hasCountry()) {
+            query = query.whereEqualTo(City.FIELD_COUNTRY, filters.getCountry());
         }
 
         // City (equality filter)
         if (filters.hasCity()) {
-            query = query.whereEqualTo(Restaurant.FIELD_CITY, filters.getCity());
+            query = query.whereEqualTo(City.FIELD_CITY, filters.getCity());
         }
 
         // Price (equality filter)
-        if (filters.hasPrice()) {
-            query = query.whereEqualTo(Restaurant.FIELD_PRICE, filters.getPrice());
+        if (filters.hasAuthor()) {
+            query = query.whereEqualTo(City.FIELD_AUTHOR, filters.getAuthor());
         }
 
         // Sort by (orderBy with direction)
@@ -263,7 +267,11 @@ public class MainFragment extends Fragment implements
     }
 
     private boolean shouldStartSignIn() {
-        System.err.println(FirebaseAuth.getInstance().getCurrentUser());
+        FirebaseUser curUser = FirebaseAuth.getInstance().getCurrentUser();
+        System.err.println("USER ID:" + curUser);
+        if (curUser != null){
+            System.err.println("Email:" + curUser.getEmail());
+        }
         return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
     }
 
@@ -274,34 +282,23 @@ public class MainFragment extends Fragment implements
                         this::onSignInResult
                 );
 
-        Intent intent = AuthUI.getInstance().createSignInIntentBuilder()
-                .setAvailableProviders(Collections.singletonList(
-                        new AuthUI.IdpConfig.EmailBuilder().build()))
-                .setIsSmartLockEnabled(false)
-                .build();
+        Intent intent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
+                //new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build()
+        )).setIsSmartLockEnabled(false)
+        .build();
 
         signinLauncher.launch(intent);
         mViewModel.setIsSigningIn(true);
     }
 
-    private void onAddItemsClicked() {
-        // Add a bunch of random restaurants
+    private void onAddItemsClicked(){
         WriteBatch batch = mFirestore.batch();
         for (int i = 0; i < 10; i++) {
-            DocumentReference restRef = mFirestore.collection("restaurants").document();
-
-            // Create random restaurant / ratings
-            Restaurant randomRestaurant = RestaurantUtil.getRandom(requireContext());
-            List<Rating> randomRatings = RatingUtil.getRandomList(randomRestaurant.getNumRatings());
-            randomRestaurant.setAvgRating(RatingUtil.getAverageRating(randomRatings));
-
-            // Add restaurant
-            batch.set(restRef, randomRestaurant);
-
-            // Add ratings to subcollection
-            for (Rating rating : randomRatings) {
-                batch.set(restRef.collection("ratings").document(), rating);
-            }
+            DocumentReference cityRef = mFirestore.collection("cities").document();
+            City cityReview = CityUtil.getRandom(requireContext());
+            System.err.println("CITY DOCS:" + cityReview.getCity() + cityReview.getCountry());
+            batch.set(cityRef, cityReview);
         }
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -337,6 +334,10 @@ public class MainFragment extends Fragment implements
         dialog.show();
     }
 
+    public void onWriteReviewClicked() {
+        mReviewDialog.show(getChildFragmentManager(), CityDialogFragment.TAG);
+    }
+
     @Override
     public void onClick(View v) {
         //Due to bump in Java version, we can not use view ids in switch
@@ -348,6 +349,17 @@ public class MainFragment extends Fragment implements
             onFilterClicked();
         } else if (viewId == R.id.buttonClearFilter) {
             onClearFilterClicked();
-        }
+        } //else if (viewId == R.id.menu_write_review){
+            //onWriteReviewClicked(v);
+        //}
     }
+
+    public void onReview(City city) {
+        // Create reference for new rating, for use inside the transaction
+        final DocumentReference cityRef = mFirestore.collection("cities").document();
+        WriteBatch batch = mFirestore.batch();
+        batch.set(cityRef, city);
+        batch.commit();
+    }
+
 }

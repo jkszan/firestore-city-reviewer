@@ -9,7 +9,7 @@
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/restaurantItemImage"
+        android:id="@+id/cityItemImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="#757575"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/restaurantItemName"
+        android:id="@+id/cityItemCity"
         style="@style/AppTheme.Subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,42 +27,29 @@
         android:layout_marginLeft="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@+id/restaurantItemImage"
-        app:layout_constraintTop_toTopOf="@+id/restaurantItemImage"
-        tools:text="Foo's Bar" />
+        app:layout_constraintStart_toEndOf="@+id/cityItemImage"
+        app:layout_constraintTop_toTopOf="@+id/cityItemImage"
+        tools:text="Toronto" />
 
     <me.zhanghai.android.materialratingbar.MaterialRatingBar
-        android:id="@+id/restaurantItemRating"
+        android:id="@+id/cityItemRating"
         style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@+id/restaurantItemName"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantItemName" />
+        app:layout_constraintStart_toStartOf="@+id/cityItemCity"
+        app:layout_constraintTop_toBottomOf="@+id/cityItemCity" />
 
     <TextView
-        android:id="@+id/restaurantItemNumRatings"
-        style="@style/AppTheme.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:textColor="@color/greyDisabled"
-        app:layout_constraintBottom_toBottomOf="@+id/restaurantItemRating"
-        app:layout_constraintStart_toEndOf="@+id/restaurantItemRating"
-        app:layout_constraintTop_toTopOf="@+id/restaurantItemRating"
-        tools:text="(10)" />
-
-    <TextView
-        android:id="@+id/restaurantItemCategory"
+        android:id="@+id/cityItemCountry"
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textColor="@color/greySecondary"
-        app:layout_constraintStart_toStartOf="@+id/restaurantItemRating"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantItemRating"
-        tools:text="Italian" />
+        app:layout_constraintStart_toStartOf="@+id/cityItemRating"
+        app:layout_constraintTop_toBottomOf="@+id/cityItemRating"
+        tools:text="Canada" />
 
     <TextView
         android:id="@+id/restaurantItemCityDivider"
@@ -70,11 +57,11 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:text="@string/divider_bullet"
-        app:layout_constraintStart_toEndOf="@+id/restaurantItemCategory"
-        app:layout_constraintTop_toTopOf="@+id/restaurantItemCategory" />
+        app:layout_constraintStart_toEndOf="@+id/cityItemCountry"
+        app:layout_constraintTop_toTopOf="@+id/cityItemCountry" />
 
     <TextView
-        android:id="@+id/restaurantItemCity"
+        android:id="@+id/cityItemAuthor"
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,17 +69,30 @@
         android:layout_marginLeft="4dp"
         android:textColor="@color/greySecondary"
         app:layout_constraintStart_toEndOf="@+id/restaurantItemCityDivider"
-        app:layout_constraintTop_toTopOf="@+id/restaurantItemCategory"
-        tools:text="San Francisco" />
+        app:layout_constraintTop_toTopOf="@+id/cityItemCountry"
+        tools:text="Anonymous" />
 
     <TextView
-        android:id="@+id/restaurantItemPrice"
-        style="@style/AppTheme.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/greySecondary"
+        android:id="@+id/cityItemDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="none"
+        android:linksClickable="false"
+        android:paddingRight="40pt"
+        android:singleLine="false"
+        android:textColor="#000000"
+        android:textSize="5pt"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/restaurantItemName"
-        tools:text="$$$" />
+        app:layout_constraintStart_toStartOf="@+id/cityItemCountry"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantItemCityDivider"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Sample Description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,26 +18,26 @@
 
     <!-- Food Type -->
     <ImageView
-        android:id="@+id/icon_category"
+        android:id="@+id/icon_country"
         style="@style/AppTheme.FilterIcon"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerCategory"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerCountry"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinnerCategory"
+        app:layout_constraintTop_toTopOf="@+id/spinnerCountry"
         app:srcCompat="@drawable/ic_fastfood_white_24dp"
         app:tint="@color/greySecondary" />
 
     <Spinner
-        android:id="@+id/spinnerCategory"
+        android:id="@+id/spinnerCountry"
         style="@style/AppTheme.FilterSpinner"
         android:layout_width="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:entries="@array/categories"
+        android:entries="@array/countries"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_category"
+        app:layout_constraintStart_toEndOf="@+id/icon_country"
         app:layout_constraintTop_toBottomOf="@+id/filterDialogTitle" />
 
 
@@ -61,29 +61,9 @@
         android:entries="@array/cities"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/icon_city"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCategory" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCountry" />
 
     <!-- Price -->
-    <ImageView
-        android:id="@+id/icon_price"
-        style="@style/AppTheme.FilterIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerPrice"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinnerPrice"
-        app:srcCompat="@drawable/ic_monetization_on_white_24px"
-        app:tint="@color/greySecondary" />
-
-    <Spinner
-        android:id="@+id/spinnerPrice"
-        style="@style/AppTheme.FilterSpinner"
-        android:layout_width="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:entries="@array/prices"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_price"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCity" />
 
     <!-- Sort By -->
     <ImageView
@@ -100,12 +80,10 @@
         style="@style/AppTheme.FilterSpinner"
         android:layout_width="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:entries="@array/sort_by"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/icon_sort"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCity" />
 
     <!-- Cancel and apply buttons -->
     <View

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.firebase.sample.cityreviewer.R;
-import com.google.firebase.sample.cityreviewer.java.model.Restaurant;
-import com.google.firebase.sample.cityreviewer.java.util.RestaurantUtil;
+import com.google.firebase.sample.cityreviewer.java.model.City;
+import com.google.firebase.sample.cityreviewer.java.util.CityUtil;
 import com.google.firebase.firestore.Query;
 
 /**
@@ -13,9 +13,10 @@ import com.google.firebase.firestore.Query;
  */
 public class Filters {
 
-    private String category = null;
     private String city = null;
-    private int price = -1;
+    private String country = null;
+    private String author = null;
+
     private String sortBy = null;
     private Query.Direction sortDirection = null;
 
@@ -23,34 +24,34 @@ public class Filters {
 
     public static Filters getDefault() {
         Filters filters = new Filters();
-        filters.setSortBy(Restaurant.FIELD_AVG_RATING);
+        filters.setSortBy(City.FIELD_RATING);
         filters.setSortDirection(Query.Direction.DESCENDING);
 
         return filters;//testing
     }
 
-    public boolean hasCategory() {
-        return !(TextUtils.isEmpty(category));
+    public boolean hasCountry() {
+        return !(TextUtils.isEmpty(country));
     }
 
     public boolean hasCity() {
         return !(TextUtils.isEmpty(city));
     }
 
-    public boolean hasPrice() {
-        return (price > 0);
+    public boolean hasAuthor() {
+        return !(TextUtils.isEmpty(author));
     }
 
     public boolean hasSortBy() {
         return !(TextUtils.isEmpty(sortBy));
     }
 
-    public String getCategory() {
-        return category;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getCity() {
@@ -61,12 +62,12 @@ public class Filters {
         this.city = city;
     }
 
-    public int getPrice() {
-        return price;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getSortBy() {
@@ -88,20 +89,10 @@ public class Filters {
     public String getSearchDescription(Context context) {
         StringBuilder desc = new StringBuilder();
 
-        if (category == null && city == null) {
+        if (country == null && city == null) {
             desc.append("<b>");
-            desc.append(context.getString(R.string.all_restaurants));
+            desc.append(context.getString(R.string.all_cities));
             desc.append("</b>");
-        }
-
-        if (category != null) {
-            desc.append("<b>");
-            desc.append(category);
-            desc.append("</b>");
-        }
-
-        if (category != null && city != null) {
-            desc.append(" in ");
         }
 
         if (city != null) {
@@ -110,10 +101,21 @@ public class Filters {
             desc.append("</b>");
         }
 
-        if (price > 0) {
-            desc.append(" for ");
+
+        if (country != null && city != null) {
+            desc.append(" in ");
+        }
+
+
+        if (country != null) {
             desc.append("<b>");
-            desc.append(RestaurantUtil.getPriceString(price));
+            desc.append(country);
+            desc.append("</b>");
+        }
+        if (author != null) {
+            desc.append(" by ");
+            desc.append("<b>");
+            desc.append(author);
             desc.append("</b>");
         }
 
@@ -121,10 +123,10 @@ public class Filters {
     }
 
     public String getOrderDescription(Context context) {
-        if (Restaurant.FIELD_PRICE.equals(sortBy)) {
-            return context.getString(R.string.sorted_by_price);
-        } else if (Restaurant.FIELD_POPULARITY.equals(sortBy)) {
-            return context.getString(R.string.sorted_by_popularity);
+        if (City.FIELD_RATING.equals(sortBy)) {
+            return context.getString(R.string.sorted_by_rating);
+        } else if (City.FIELD_AUTHOR.equals(sortBy)) {
+            return context.getString(R.string.sorted_by_author);
         } else {
             return context.getString(R.string.sorted_by_rating);
         }
