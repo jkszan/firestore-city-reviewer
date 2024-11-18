@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,12 +17,17 @@ import com.google.firebase.sample.cityreviewer.databinding.DialogFiltersBinding;
 import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.firestore.Query;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Dialog Fragment containing filter form.
  */
 public class FilterDialogFragment extends DialogFragment implements View.OnClickListener {
 
     public static final String TAG = "FilterDialog";
+    public Set<String> countryList;
 
     interface FilterListener {
 
@@ -29,7 +36,13 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     }
 
     private DialogFiltersBinding mBinding;
+
+    private ArrayAdapter<String> countryAdapter;
     private FilterListener mFilterListener;
+
+    public FilterDialogFragment(Set<String> countrySet){
+        this.countryList = countrySet;
+    }
 
     @Nullable
     @Override
@@ -37,11 +50,21 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = DialogFiltersBinding.inflate(inflater, container, false);
-        
+
+
         mBinding.buttonSearch.setOnClickListener(this);
         mBinding.buttonCancel.setOnClickListener(this);
-
+        updateCountrySpinner();
         return mBinding.getRoot();
+    }
+
+    // Sets contents of country dropdown dynamically
+    public void updateCountrySpinner(){
+        Spinner countryOptions = (Spinner) this.mBinding.getRoot().findViewById(R.id.spinnerCountry);
+        List<String> countries = Arrays.asList(Arrays.copyOf(this.countryList.toArray(), this.countryList.size(), String[].class));
+        countryAdapter = new ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, countries);
+        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countryOptions.setAdapter(countryAdapter);
     }
 
     @Override
@@ -91,8 +114,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
     @Nullable
     private String getSelectedCity() {
-        String selected = (String) mBinding.spinnerCity.getSelectedItem();
-        if (getString(R.string.value_any_city).equals(selected)) {
+        String selected = mBinding.CityFilterText.getText().toString();
+        if (selected.isEmpty()) {
             return null;
         } else {
             return selected;
@@ -126,7 +149,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public void resetFilters() {
         if (mBinding != null) {
             mBinding.spinnerCountry.setSelection(0);
-            mBinding.spinnerCity.setSelection(0);
+            mBinding.CityFilterText.setText("");
             mBinding.spinnerSort.setSelection(0);
         }
     }

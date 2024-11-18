@@ -36,6 +36,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.FragmentMainBinding;
 import com.google.firebase.sample.cityreviewer.java.adapter.CityAdapter;
@@ -50,6 +52,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainFragment extends Fragment implements
         FilterDialogFragment.FilterListener,
@@ -74,6 +79,7 @@ public class MainFragment extends Fragment implements
 
     private MainActivityViewModel mViewModel;
 
+    private Set<String> uniqueCountries;
     private MenuHost menuHost;
 
     @Nullable
@@ -132,10 +138,33 @@ public class MainFragment extends Fragment implements
 
         mBinding.recyclerRestaurants.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.recyclerRestaurants.setAdapter(mAdapter);
+        uniqueCountries =  new HashSet<>();
+        uniqueCountries.add("All countries");
+        populateCountrySet();
 
         // Filter Dialog
-        mFilterDialog = new FilterDialogFragment();
+        mFilterDialog = new FilterDialogFragment(uniqueCountries);
         mReviewDialog = new CityDialogFragment();
+    }
+
+    private void populateCountrySet(){
+
+        mFirestore.collection("countries")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                uniqueCountries.add(document.getData().get("CountryName").toString());
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
     }
 
     @Override
@@ -211,6 +240,8 @@ public class MainFragment extends Fragment implements
 
     public void onFilterClicked() {
         // Show the dialog containing filter options
+        populateCountrySet();
+        mFilterDialog.countryList = uniqueCountries;
         mFilterDialog.show(getChildFragmentManager(), FilterDialogFragment.TAG);
     }
 
@@ -292,6 +323,16 @@ public class MainFragment extends Fragment implements
         mViewModel.setIsSigningIn(true);
     }
 
+    private void addNewCountry(String country){
+        WriteBatch newCountry = mFirestore.batch();
+        DocumentReference countryRef = mFirestore.collection("countries").document();
+        HashMap<String,String> countryMap = new HashMap<>();
+        countryMap.put("CountryName", country);
+        newCountry.set(countryRef, countryMap);
+        newCountry.commit();
+        uniqueCountries.add(country);
+    }
+
     private void onAddItemsClicked(){
         WriteBatch batch = mFirestore.batch();
         for (int i = 0; i < 10; i++) {
@@ -299,6 +340,9 @@ public class MainFragment extends Fragment implements
             City cityReview = CityUtil.getRandom(requireContext());
             System.err.println("CITY DOCS:" + cityReview.getCity() + cityReview.getCountry());
             batch.set(cityRef, cityReview);
+            if (!uniqueCountries.contains(cityReview.getCountry())){
+                addNewCountry(cityReview.getCountry());
+            }
         }
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -360,6 +404,9 @@ public class MainFragment extends Fragment implements
         WriteBatch batch = mFirestore.batch();
         batch.set(cityRef, city);
         batch.commit();
+        if (!uniqueCountries.contains(city.getCountry())){
+            addNewCountry(city.getCountry());
+        }
     }
 
 }

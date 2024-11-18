@@ -14,7 +14,6 @@ public class CityUtil {
         City city = new City();
         Random random = new Random();
 
-
         String[] cities = context.getResources().getStringArray(R.array.cities);
         cities = Arrays.copyOfRange(cities, 1, cities.length);
         int index = random.nextInt(cities.length);

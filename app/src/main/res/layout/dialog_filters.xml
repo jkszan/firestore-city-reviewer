@@ -21,11 +21,12 @@
         android:id="@+id/icon_country"
         style="@style/AppTheme.FilterIcon"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/spinnerCountry"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerCountry"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/spinnerCountry"
-        app:srcCompat="@drawable/ic_fastfood_white_24dp"
+        app:srcCompat="@drawable/ic_place_white_24px"
         app:tint="@color/greySecondary" />
 
     <Spinner
@@ -33,9 +34,10 @@
         style="@style/AppTheme.FilterSpinner"
         android:layout_width="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:entries="@array/countries"
+        app:layout_constraintBottom_toTopOf="@+id/CityFilterText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/icon_country"
         app:layout_constraintTop_toBottomOf="@+id/filterDialogTitle" />
@@ -45,23 +47,13 @@
     <ImageView
         android:id="@+id/icon_city"
         style="@style/AppTheme.FilterIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerCity"
+        android:layout_marginEnd="9dp"
+        app:layout_constraintBottom_toBottomOf="@+id/CityFilterText"
+        app:layout_constraintEnd_toStartOf="@+id/CityFilterText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinnerCity"
+        app:layout_constraintTop_toTopOf="@+id/CityFilterText"
         app:srcCompat="@drawable/ic_place_white_24px"
         app:tint="@color/greySecondary" />
-
-    <Spinner
-        android:id="@+id/spinnerCity"
-        style="@style/AppTheme.FilterSpinner"
-        android:layout_width="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:entries="@array/cities"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon_city"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCountry" />
 
     <!-- Price -->
 
@@ -69,7 +61,9 @@
     <ImageView
         android:id="@+id/icon_sort"
         style="@style/AppTheme.FilterIcon"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/spinnerSort"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerSort"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/spinnerSort"
         app:srcCompat="@drawable/ic_sort_white_24px"
@@ -80,10 +74,11 @@
         style="@style/AppTheme.FilterSpinner"
         android:layout_width="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:entries="@array/sort_by"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/icon_sort"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCity" />
+        app:layout_constraintTop_toBottomOf="@+id/CityFilterText" />
 
     <!-- Cancel and apply buttons -->
     <View
@@ -122,6 +117,20 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonCancel"
         app:layout_constraintTop_toBottomOf="@+id/spinnerSort" />
+
+    <EditText
+        android:id="@+id/CityFilterText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:editable="true"
+        android:hint="City"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerSort"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/icon_city"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCountry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
