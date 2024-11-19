@@ -7,6 +7,7 @@ import com.google.firebase.sample.cityreviewer.java.model.City;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.UUID;
 
 public class CityUtil {
 
@@ -29,6 +30,7 @@ public class CityUtil {
         city.setRating(pointRating);
 
         city.setAuthor("Anonymous");
+        city.setUID(UUID.randomUUID().toString());
         city.setDescription("Sample Description");
 
         return city;

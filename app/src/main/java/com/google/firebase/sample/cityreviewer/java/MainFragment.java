@@ -32,6 +32,8 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,10 +122,10 @@ public class MainFragment extends Fragment implements
             protected void onDataChanged() {
                 // Show/hide content if the query returns empty.
                 if (getItemCount() == 0) {
-                    mBinding.recyclerRestaurants.setVisibility(View.GONE);
+                    mBinding.recyclerCities.setVisibility(View.GONE);
                     mBinding.viewEmpty.setVisibility(View.VISIBLE);
                 } else {
-                    mBinding.recyclerRestaurants.setVisibility(View.VISIBLE);
+                    mBinding.recyclerCities.setVisibility(View.VISIBLE);
                     mBinding.viewEmpty.setVisibility(View.GONE);
                 }
             }
@@ -136,8 +138,8 @@ public class MainFragment extends Fragment implements
             }
         };
 
-        mBinding.recyclerRestaurants.setLayoutManager(new LinearLayoutManager(requireContext()));
-        mBinding.recyclerRestaurants.setAdapter(mAdapter);
+        mBinding.recyclerCities.setLayoutManager(new LinearLayoutManager(requireContext()));
+        mBinding.recyclerCities.setAdapter(mAdapter);
         uniqueCountries =  new HashSet<>();
         uniqueCountries.add("All countries");
         populateCountrySet();
@@ -255,6 +257,25 @@ public class MainFragment extends Fragment implements
     public void onCitySelected(DocumentSnapshot city) {
         // Go to the details page for the selected city
         return;
+    }
+
+    @Override
+    public void onDeleteCityClicked(DocumentSnapshot city) {
+        String documentPath = city.getReference().getPath();
+        mFirestore.document(documentPath)
+            .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Document deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Failed to delete document", e);
+                    }
+                });
     }
 
     @Override
@@ -393,9 +414,7 @@ public class MainFragment extends Fragment implements
             onFilterClicked();
         } else if (viewId == R.id.buttonClearFilter) {
             onClearFilterClicked();
-        } //else if (viewId == R.id.menu_write_review){
-            //onWriteReviewClicked(v);
-        //}
+        }
     }
 
     public void onReview(City city) {

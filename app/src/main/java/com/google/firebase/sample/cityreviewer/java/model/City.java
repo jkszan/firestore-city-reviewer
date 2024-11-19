@@ -10,6 +10,7 @@ public class City {
     public static final String FIELD_AUTHOR = "author";
 
     private String author;
+    private String author_uid;
     private String city;
     private String country;
     private float rating;
@@ -20,7 +21,8 @@ public class City {
 
     public City (){}
 
-    public City(String author, String city, String country, float rating, String description) {
+    public City(String author_uid, String author, String city, String country, float rating, String description) {
+        this.author_uid = author_uid;
         this.author = author;
         this.city = city;
         this.country = country;
@@ -29,6 +31,13 @@ public class City {
         this.description = description;
     }
 
+    public String getUID(){
+        return this.author_uid;
+    }
+
+    public void setUID(String author_uid){
+        this.author_uid = author_uid;
+    }
     public String getAuthor(){
         return this.author;
     }

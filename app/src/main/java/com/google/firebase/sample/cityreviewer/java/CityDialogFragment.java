@@ -67,6 +67,7 @@ public class CityDialogFragment extends DialogFragment implements View.OnClickLi
 
         private void onSubmitClicked(View view) {
             City city = new City(
+                    FirebaseAuth.getInstance().getCurrentUser().getUid(),
                     FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                     mBinding.cityCityText.getText().toString(),
                     mBinding.cityCountryText.getText().toString(),

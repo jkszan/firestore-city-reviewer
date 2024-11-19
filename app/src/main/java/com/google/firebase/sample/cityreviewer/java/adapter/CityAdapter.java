@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.ItemCityBinding;
 import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,6 +22,7 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
     public interface OnCitySelectedListener {
 
         void onCitySelected(DocumentSnapshot city);
+        void onDeleteCityClicked(DocumentSnapshot city);
 
     }
 
@@ -41,10 +43,9 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(getSnapshot(position), mListener);
     }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ItemCityBinding binding;
+        public ItemCityBinding binding;
 
         public ViewHolder(ItemCityBinding binding) {
             super(binding.getRoot());
@@ -76,9 +77,23 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (listener != null) {
                         listener.onCitySelected(snapshot);
                     }
+                }
+            });
+            binding.buttonDeleteReview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onDeleteCityClicked(snapshot);
+                    }
+                    //onDeleteReviewClicked(binding);
+                    System.err.print(R.id.buttonDeleteReview + "TESTUB" + v.getId());
+                    //if(v.getId() == R.id.buttonDeleteReview){
+                    //    System.err.println(v.getResources().toString() + "TESTUB");
+                    //}
                 }
             });
         }

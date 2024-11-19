@@ -2,15 +2,14 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /cities/{city} {
-      allow write: if true; //if request.auth != null;
       allow read: if true;
+      allow write, delete: if request.auth.uid != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth.uid != null;
     }
+
     match /countries/{country}{
       allow write: if true;
       allow read: if true;
     }
-    allow write: if true;
-    allow create: if true;
-    allow read: if true;
   }
 }
