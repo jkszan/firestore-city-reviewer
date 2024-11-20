@@ -5,6 +5,7 @@ import static com.google.android.material.internal.ViewUtils.hideKeyboard;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,8 +53,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,6 +77,8 @@ public class MainFragment extends Fragment implements
     private FragmentMainBinding mBinding;
 
     private FirebaseFirestore mFirestore;
+
+    private FirebaseStorage imageStorage;
     private Query mQuery;
 
     private FilterDialogFragment mFilterDialog;
@@ -109,6 +117,7 @@ public class MainFragment extends Fragment implements
 
         // Firestore
         mFirestore = FirebaseFirestore.getInstance();
+        imageStorage = FirebaseStorage.getInstance();
 
         // TODO: Use basic strategy with a where clause for user posts/community posts
         // Get ${LIMIT} cities
@@ -417,11 +426,38 @@ public class MainFragment extends Fragment implements
         }
     }
 
+    private ArrayList<String> storeImages(City city){
+
+        Bitmap[] photos = city.getPhotos();
+        ArrayList<String> photoUrls = new ArrayList<>();
+
+        StorageReference imageRef = imageStorage.getReference();
+        for (Bitmap photo: photos){
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            StorageReference fullImageRef = imageRef.child(city.getAuthor()+"/"+city.getCity()+"/"+photoUrls.size());
+            fullImageRef.putBytes(outputStream.toByteArray());
+            photoUrls.add(fullImageRef.getPath());
+        }
+        return photoUrls;
+
+    }
     public void onReview(City city) {
         // Create reference for new rating, for use inside the transaction
         final DocumentReference cityRef = mFirestore.collection("cities").document();
+        ArrayList<String> imageUrls = storeImages(city);
+        HashMap<String, Object> cityData = new HashMap<String, Object>();
+        cityData.put("city", city.getCity());
+        cityData.put("country", city.getCountry());
+        cityData.put("photoURLs", imageUrls);
+        cityData.put("rating", city.getRating());
+        cityData.put("photoDescriptions", city.getPhotoDescriptions());
+        cityData.put("description", city.getDescription());
+        cityData.put("UID", city.getUID());
+        cityData.put("author", city.getAuthor());
+
         WriteBatch batch = mFirestore.batch();
-        batch.set(cityRef, city);
+        batch.set(cityRef, cityData);
         batch.commit();
         if (!uniqueCountries.contains(city.getCountry())){
             addNewCountry(city.getCountry());

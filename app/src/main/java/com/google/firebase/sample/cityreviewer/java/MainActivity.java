@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.sample.cityreviewer.R;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class  MainActivity extends AppCompatActivity {
 
@@ -19,6 +20,8 @@ public class  MainActivity extends AppCompatActivity {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.useEmulator("10.0.2.2", 8080);
         FirebaseFirestore.setLoggingEnabled(true);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storage.useEmulator("10.0.2.2", 9199);
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(false)
                 .build();
