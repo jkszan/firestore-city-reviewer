@@ -86,15 +86,25 @@ public class MainFragment extends Fragment implements
 
     private CityAdapter mAdapter;
 
+    private ActivityResultLauncher<Intent> signinLauncher;
     private MainActivityViewModel mViewModel;
 
     private Set<String> uniqueCountries;
     private MenuHost menuHost;
 
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        signinLauncher = requireActivity()
+                .registerForActivityResult(new FirebaseAuthUIActivityResultContract(),
+                        this::onSignInResult
+                );
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
+
         // MenuProvider
         return mBinding.getRoot();
     }
@@ -219,15 +229,14 @@ public class MainFragment extends Fragment implements
 
         int itemId = item.getItemId();
         if (itemId == R.id.menu_add_items) {
-            onAddItemsClicked();
+            //onAddItemsClicked(); //TODO: Either re-enable or remove from UI
             return true;
         } else if (itemId == R.id.menu_sign_out) {
+            //FirebaseAuth.getInstance().signOut();
             AuthUI.getInstance().signOut(requireContext());
             startSignIn();
             return true;
         } else if (itemId == R.id.menu_write_review) {
-            //TODO: Write dialog popup for writing a review
-            //mReviewDialog.show(getChildFragmentManager(), CityDialogFragment.TAG);
             onWriteReviewClicked();
         }
         return false;
@@ -344,11 +353,6 @@ public class MainFragment extends Fragment implements
 
     private void startSignIn() {
         // Sign in with FirebaseUI
-        ActivityResultLauncher<Intent> signinLauncher = requireActivity()
-                .registerForActivityResult(new FirebaseAuthUIActivityResultContract(),
-                        this::onSignInResult
-                );
-
         Intent intent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
                 //new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.EmailBuilder().build()

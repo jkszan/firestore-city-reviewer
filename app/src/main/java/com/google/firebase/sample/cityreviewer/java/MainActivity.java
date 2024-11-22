@@ -14,18 +14,36 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class  MainActivity extends AppCompatActivity {
 
+    private FirebaseFirestore firestore;
+    private FirebaseAuth auth;
+    private FirebaseStorage storage;
+
+    private FirebaseFirestoreSettings settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseAuth.getInstance().useEmulator("10.0.2.2", 9099);
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.useEmulator("10.0.2.2", 8080);
-        FirebaseFirestore.setLoggingEnabled(true);
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        storage.useEmulator("10.0.2.2", 9199);
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        firestore.setFirestoreSettings(settings);
+
+
+        if (auth == null){
+            auth = FirebaseAuth.getInstance();
+            auth.useEmulator("10.0.2.2", 9099);
+        }
+
+        if (firestore == null){
+            firestore = FirebaseFirestore.getInstance();
+            firestore.useEmulator("10.0.2.2", 8080);
+            FirebaseFirestore.setLoggingEnabled(true);
+        }
+        if (storage == null) {
+            storage = FirebaseStorage.getInstance();
+            storage.useEmulator("10.0.2.2", 9199);
+        }
+        if (settings == null) {
+            settings = new FirebaseFirestoreSettings.Builder()
+                    .setPersistenceEnabled(false)
+                    .build();
+            firestore.setFirestoreSettings(settings);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
