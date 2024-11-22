@@ -95,6 +95,7 @@ public class MainFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = FragmentMainBinding.inflate(inflater, container, false);
+        // MenuProvider
         return mBinding.getRoot();
     }
 
@@ -103,10 +104,11 @@ public class MainFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         mBinding.filterBar.setOnClickListener(this);
         mBinding.buttonClearFilter.setOnClickListener(this);
+        if (menuHost == null) {
+            menuHost = requireActivity();
+            menuHost.addMenuProvider(this);
+        }
 
-        // MenuProvider
-        menuHost = requireActivity();
-        menuHost.addMenuProvider(this);
 
         // View model
         mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
