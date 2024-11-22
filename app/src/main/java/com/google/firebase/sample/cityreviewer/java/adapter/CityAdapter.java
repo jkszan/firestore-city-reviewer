@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.ItemCityBinding;
 import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -89,11 +88,6 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
                     if (listener != null) {
                         listener.onDeleteCityClicked(snapshot);
                     }
-                    //onDeleteReviewClicked(binding);
-                    System.err.print(R.id.buttonDeleteReview + "TESTUB" + v.getId());
-                    //if(v.getId() == R.id.buttonDeleteReview){
-                    //    System.err.println(v.getResources().toString() + "TESTUB");
-                    //}
                 }
             });
         }

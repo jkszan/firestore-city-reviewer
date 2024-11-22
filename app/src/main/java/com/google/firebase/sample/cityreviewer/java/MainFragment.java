@@ -1,7 +1,5 @@
 package com.google.firebase.sample.cityreviewer.java;
 
-import static com.google.android.material.internal.ViewUtils.hideKeyboard;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +23,7 @@ import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.auth.AuthUI;
@@ -149,7 +148,7 @@ public class MainFragment extends Fragment implements
 
         mBinding.recyclerCities.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.recyclerCities.setAdapter(mAdapter);
-        uniqueCountries =  new HashSet<>();
+        uniqueCountries = new HashSet<>();
         uniqueCountries.add("All countries");
         populateCountrySet();
 
@@ -158,7 +157,7 @@ public class MainFragment extends Fragment implements
         mReviewDialog = new CityDialogFragment();
     }
 
-    private void populateCountrySet(){
+    private void populateCountrySet() {
 
         mFirestore.collection("countries")
                 .get()
@@ -264,8 +263,13 @@ public class MainFragment extends Fragment implements
 
     @Override
     public void onCitySelected(DocumentSnapshot city) {
-        // Go to the details page for the selected city
-        return;
+
+        // Go to the details page for the selected restaurant
+        MainFragmentDirections.ActionMainFragmentToCityReviewFragment action = MainFragmentDirections
+                .actionMainFragmentToCityReviewFragment(city.getId());
+
+        NavHostFragment.findNavController(this)
+                .navigate(action);
     }
 
     @Override

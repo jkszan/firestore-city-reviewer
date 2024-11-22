@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:foregroundGravity="center_vertical"
+    android:background="@color/reviewBack"
+    tools:ignore="ContentDescription">
+
+    <!-- Ratings -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/restaurant_top_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Back button -->
+
+        <ImageView
+            android:id="@+id/cityButtonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintEnd_toStartOf="@+id/cityReviewName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back_white_24px"
+            tools:srcCompat="@drawable/ic_arrow_back_white_24px" />
+
+        <TextView
+            android:id="@+id/cityReviewName"
+            style="@style/AppTheme.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="28dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/cityReviewRating"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="CityName" />
+
+        <TextView
+            android:id="@+id/restaurantCity_divider"
+            style="@style/AppTheme.TextDivider"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:foregroundGravity="center_vertical"
+            android:text="|"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cityReviewName"
+            app:layout_constraintStart_toEndOf="@+id/cityReviewName"
+            app:layout_constraintTop_toTopOf="@+id/cityReviewName"
+            app:layout_constraintVertical_bias="0.625" />
+
+        <TextView
+            android:id="@+id/cityReviewCountry"
+            style="@style/AppTheme.Subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cityReviewName"
+            app:layout_constraintStart_toEndOf="@+id/restaurantCity_divider"
+            app:layout_constraintTop_toTopOf="@+id/cityReviewName"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Canada" />
+
+        <TextView
+            android:id="@+id/cityReviewAuthor"
+            style="@style/AppTheme.Subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@+id/cityReviewName"
+            app:layout_constraintTop_toBottomOf="@+id/cityReviewName"
+            tools:text="AuthorName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- View for empty ratings -->
+    <LinearLayout
+        android:id="@+id/viewEmptyRatings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_top_card"
+        tools:ignore="UseCompoundDrawables"
+        tools:visibility="visible" />
+
+    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+        android:id="@+id/cityReviewRating"
+        style="@style/Widget.MaterialRatingBar.RatingBar.Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cityReviewAuthor"
+        android:layout_marginStart="66dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="66dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_top_card"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_top_card" />
+
+    <TextView
+        android:id="@+id/cityReviewDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Sample Description Text"
+        android:textColor="@color/greyPrimary"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityReviewRating" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:isScrollContainer="true"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="always"
+        android:paddingTop="8dp"
+        android:scrollIndicators="right"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarSize="4dp"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:verticalScrollbarPosition="right"
+        app:layout_constraintTop_toBottomOf="@id/cityReviewDescription"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/photolayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="vertical"
+                android:background="@color/reviewCardBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/photoView"
+                    android:layout_width="match_parent"
+                    android:layout_height="138dp"
+                    android:layout_marginTop="10dp"
+                    tools:srcCompat="@drawable/food_1"/>
+
+                <TextView
+                    android:id="@+id/photoDescription"
+                    style="@style/AppTheme.Subheader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/greyPrimary"
+                    tools:text="I thought it was pretty great! And I really have a ton to say wow." />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/photolayout2"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="vertical"
+                android:background="@color/reviewCardBack"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/photolayout1">
+
+                <ImageView
+                    android:id="@+id/photoView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="138dp"
+                    android:layout_marginTop="10dp"
+                    tools:srcCompat="@drawable/food_1"/>
+
+                <TextView
+                    android:id="@+id/photoDescription2"
+                    style="@style/AppTheme.Subheader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/greyPrimary"
+                    tools:text="I thought it was pretty great! And I really have a ton to say wow." />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/photolayout3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="vertical"
+                android:background="@color/reviewCardBack"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/photolayout2">
+
+                <ImageView
+                    android:id="@+id/photoView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="138dp"
+                    android:layout_marginTop="10dp"
+                    tools:srcCompat="@drawable/food_1"/>
+
+                <TextView
+                    android:id="@+id/photoDescription3"
+                    style="@style/AppTheme.Subheader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/greyPrimary"
+                    tools:text="I thought it was pretty great! And I really have a ton to say wow." />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
