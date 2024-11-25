@@ -113,6 +113,12 @@ public class CityDialogFragment extends DialogFragment implements View.OnClickLi
         }
 
         private void onSubmitClicked(View view) {
+
+            // Deny Review if Country or City is not input
+            if (mBinding.cityCity.getText().toString().isBlank() || mBinding.cityCountryText.getText().toString().isBlank()){
+                return;
+            }
+
             String[] imageDescriptions = new String[3];
             imageDescriptions[0] = mBinding.image1Description.getText().toString();
             imageDescriptions[1] = mBinding.image2Description.getText().toString();
