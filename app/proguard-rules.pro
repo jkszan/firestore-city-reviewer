@@ -25,8 +25,7 @@
 #-renamesourcefileattribute SourceFile
 
 # Keep custom model classes
--keep class com.google.firebase.example.cityreviewer.java.model.** { *; }
--keep class com.google.firebase.example.cityreviewer.kotlin.model.** { *; }
+-keep class com.google.firebase.sample.cityreviewer.java.model.** { *; }
 
 # https://github.com/firebase/FirebaseUI-Android/issues/1175
 -dontwarn okio.**

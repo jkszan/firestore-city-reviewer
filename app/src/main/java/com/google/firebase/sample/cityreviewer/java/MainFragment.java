@@ -302,6 +302,16 @@ public class MainFragment extends Fragment implements
                 });
     }
 
+    private Query startsWith(Query query, String field, String pattern){
+        char lastChar = pattern.charAt(pattern.length()-1);
+        lastChar++;
+        String patternBound = pattern.substring(0, pattern.length()-1) + lastChar;
+        query = query.whereGreaterThanOrEqualTo(field, pattern);
+        query = query.whereLessThan(field, patternBound);
+        return query;
+
+    }
+
     @Override
     public void onFilter(Filters filters) {
         // Construct query basic query
@@ -312,14 +322,14 @@ public class MainFragment extends Fragment implements
             query = query.whereEqualTo(City.FIELD_COUNTRY, filters.getCountry());
         }
 
-        // City (equality filter)
+        // City (starts with filter)
         if (filters.hasCity()) {
-            query = query.whereEqualTo(City.FIELD_CITY, filters.getCity());
+            query = startsWith(query, City.FIELD_CITY, filters.getCity());
         }
 
-        // Price (equality filter)
+        // Author (starts with filter)
         if (filters.hasAuthor()) {
-            query = query.whereEqualTo(City.FIELD_AUTHOR, filters.getAuthor());
+            query = startsWith(query, City.FIELD_AUTHOR, filters.getAuthor());
         }
 
         // Sort by (orderBy with direction)
@@ -354,7 +364,6 @@ public class MainFragment extends Fragment implements
     private void startSignIn() {
         // Sign in with FirebaseUI
         Intent intent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
-                //new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.EmailBuilder().build()
         )).setIsSmartLockEnabled(false)
         .build();

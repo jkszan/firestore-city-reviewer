@@ -40,7 +40,6 @@ public class  MainActivity extends AppCompatActivity {
         }
         if (settings == null) {
             settings = new FirebaseFirestoreSettings.Builder()
-                    .setPersistenceEnabled(false)
                     .build();
             firestore.setFirestoreSettings(settings);
         }
