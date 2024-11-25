@@ -9,20 +9,10 @@
         android:name="androidx.multidex.MultiDexApplication"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".EntryChoiceActivity"
-            android:theme="@style/AppTheme.EntryChoice"
+        <activity android:name=".java.MainActivity"
             android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
-        <activity
-            android:name=".java.MainActivity"
-            android:theme="@style/AppTheme.Activity"/>
     </application>
 
 </manifest>
