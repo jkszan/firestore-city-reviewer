@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.sample.cityreviewer.databinding.ItemCityBinding;
 import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +22,7 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
         void onCitySelected(DocumentSnapshot city);
         void onDeleteCityClicked(DocumentSnapshot city);
 
+        void retrieveIcon(String iconPath, ItemCityBinding binding);
     }
 
     private OnCitySelectedListener mListener;
@@ -62,9 +62,9 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
             Resources resources = itemView.getResources();
 
             // Load image
-            Glide.with(binding.cityItemImage.getContext())
-                    .load(city.retrievePhoto()) // TODO: Fix to grab an icon photo
-                    .into(binding.cityItemImage);
+            if (city.getIconPath() != null) {
+                listener.retrieveIcon(city.getIconPath(), binding);
+            }
 
             binding.cityItemCity.setText(city.getCity());
             binding.cityItemRating.setRating((float) city.getRating());

@@ -4,12 +4,8 @@ package com.google.firebase.sample.cityreviewer.java.model;
 
 
 import android.graphics.Bitmap;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 public class City {
     public static final String FIELD_CITY = "city";
@@ -29,6 +25,8 @@ public class City {
     private ArrayList<String> photoDescriptions;
 
     private Date timeCreated;
+
+    private String iconPath;
 
     private String description;
 
@@ -51,6 +49,7 @@ public class City {
         }
         this.photos = new Bitmap[photoList.size()];
         this.photos = photoList.toArray(this.photos);
+        this.iconPath = null;
     }
 
     public Bitmap[] getPhotos(){
@@ -109,15 +108,19 @@ public class City {
         this.description = description;
     }
 
-    public byte[] retrievePhoto() {
-        return null;
-    }
-
     public void setTimeCreated(Date timeCreated) {
         this.timeCreated = timeCreated;
     }
 
     public Date getTimeCreated() {
         return timeCreated;
+    }
+
+    public void setIconPath(String iconPath){
+        this.iconPath = iconPath;
+    }
+
+    public String getIconPath() {
+        return iconPath;
     }
 }

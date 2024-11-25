@@ -29,7 +29,6 @@
         android:layout_height="60dp"
         android:background="#757575"
         android:scaleType="centerCrop"
-        android:src="@drawable/food_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

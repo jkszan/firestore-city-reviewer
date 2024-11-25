@@ -5,13 +5,14 @@ service cloud.firestore {
 
       allow create: if request.auth.uid != null 
                     && request.auth.uid == request.resource.data.UID
-      							&& request.time.date() == request.resource.data.timeCreated.date()
-    								&& request.time >= request.resource.data.timeCreated;
+    								&& request.time >= request.resource.data.timeCreated
+      							&& request.time.toMillis() - request.resource.data.timeCreated.toMillis() <= 600000;
 
       allow read: if true;
 
       allow update: if request.auth.uid != null
                     && request.auth.uid == resource.data.UID
+                    && request.resource.data.UID == resource.data.UID
                     && request.resource.data.timeCreated == resource.data.timeCreated;
 
       allow delete: if request.auth.uid != null

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -42,6 +44,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.FragmentMainBinding;
+import com.google.firebase.sample.cityreviewer.databinding.ItemCityBinding;
 import com.google.firebase.sample.cityreviewer.java.adapter.CityAdapter;
 import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.sample.cityreviewer.java.util.CityUtil;
@@ -450,12 +453,43 @@ public class MainFragment extends Fragment implements
         }
     }
 
+    public void retrieveIcon(String iconPath, ItemCityBinding binding){
+        StorageReference storageRef = imageStorage.getReference();
+
+        StorageReference pathReference = storageRef.child(iconPath);
+        pathReference.getBytes(10*1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap photoBitMap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                Glide.with(binding.cityItemImage.getContext())
+                        .load(photoBitMap) // TODO: Fix to grab an icon photo
+                        .into(binding.cityItemImage);
+                // Data for "images/island.jpg" is returns, use this as needed
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                System.err.println("Failed to injest photos");
+                // Handle any errors
+            }
+        });
+    }
     private ArrayList<String> storeImages(City city){
 
         Bitmap[] photos = city.getPhotos();
         ArrayList<String> photoUrls = new ArrayList<>();
 
         StorageReference imageRef = imageStorage.getReference();
+
+        if (photos.length > 0){
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            photos[0].compress(Bitmap.CompressFormat.PNG, 25, outputStream);
+            StorageReference fullImageRef = imageRef.child(city.getAuthor()+"/"+city.getCity()+"/icon");
+            fullImageRef.putBytes(outputStream.toByteArray());
+            city.setIconPath(fullImageRef.getPath());
+        }
+
         for (Bitmap photo: photos){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
@@ -474,6 +508,7 @@ public class MainFragment extends Fragment implements
         cityData.put("city", city.getCity());
         cityData.put("country", city.getCountry());
         cityData.put("photoURLs", imageUrls);
+        cityData.put("iconPath", city.getIconPath());
         cityData.put("rating", city.getRating());
         cityData.put("photoDescriptions", city.getPhotoDescriptions());
         cityData.put("description", city.getDescription());

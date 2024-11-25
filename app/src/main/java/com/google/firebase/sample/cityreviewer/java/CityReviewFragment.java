@@ -132,7 +132,7 @@ public class CityReviewFragment extends Fragment
             }
         });
     }
-
+    
     private void setPhotoBindingsFromStorage(ArrayList<String> photoURIs){
 
         StorageReference storageRef = mStorage.getReference();
