@@ -62,10 +62,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MainFragment extends Fragment implements
         FilterDialogFragment.FilterListener,
@@ -182,7 +179,7 @@ public class MainFragment extends Fragment implements
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String newCountry = document.getData().get("CountryName").toString();
+                                String newCountry = document.getId();
                                 if (!uniqueCountries.contains(newCountry)){
                                     uniqueCountries.add(newCountry);
                                     Log.d(TAG, document.getId() + " => " + document.getData());
@@ -373,6 +370,7 @@ public class MainFragment extends Fragment implements
         Intent intent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build()
         )).setIsSmartLockEnabled(false)
+        .setTheme(R.style.AppTheme) //TODO: Fix this to include Sign-in banner
         .build();
 
         signinLauncher.launch(intent);
@@ -381,10 +379,8 @@ public class MainFragment extends Fragment implements
 
     private void addNewCountry(String country){
         WriteBatch newCountry = mFirestore.batch();
-        DocumentReference countryRef = mFirestore.collection("countries").document();
-        HashMap<String,String> countryMap = new HashMap<>();
-        countryMap.put("CountryName", country);
-        newCountry.set(countryRef, countryMap);
+        DocumentReference countryRef = mFirestore.collection("countries").document(country);
+        newCountry.set(countryRef, new HashMap<>());
         newCountry.commit();
         uniqueCountries.add(country);
     }
