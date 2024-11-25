@@ -63,7 +63,7 @@ public class CityAdapter extends FirestoreAdapter<CityAdapter.ViewHolder> {
 
             // Load image
             Glide.with(binding.cityItemImage.getContext())
-                    .load(city.getPhoto())
+                    .load(city.retrievePhoto()) // TODO: Fix to grab an icon photo
                     .into(binding.cityItemImage);
 
             binding.cityItemCity.setText(city.getCity());

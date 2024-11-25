@@ -15,9 +15,11 @@
 
     <string name="sort_by_rating">Sort by Rating</string>
     <string name="sort_by_author">Sort by Author</string>
+    <string name="sort_by_date">Sort by Date</string>
 
     <string name="sorted_by_rating">Sorted by Rating</string>
     <string name="sorted_by_author">Sorted by Author</string>
+    <string name="sorted_by_date">Sorted by Date</string>
 
     <string name="add_random_items">Add Random Items</string>
     <string name="sign_out">Sign Out</string>
@@ -56,6 +58,7 @@
 
     <!-- Ways you can sort restaurants -->
     <string-array name="sort_by">
+        <item>@string/sort_by_date</item>
         <item>@string/sort_by_rating</item>
         <item>@string/sort_by_author</item>
     </string-array>

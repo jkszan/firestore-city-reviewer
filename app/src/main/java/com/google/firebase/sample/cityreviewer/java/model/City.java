@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class City {
@@ -15,6 +16,8 @@ public class City {
     public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_RATING = "rating";
     public static final String FIELD_AUTHOR = "author";
+
+    public static final String FIELD_TIME = "timeCreated";
 
     private String author;
     private String author_uid;
@@ -24,6 +27,8 @@ public class City {
 
     private Bitmap[] photos;
     private ArrayList<String> photoDescriptions;
+
+    private Date timeCreated;
 
     private String description;
 
@@ -104,7 +109,15 @@ public class City {
         this.description = description;
     }
 
-    public byte[] getPhoto() {
+    public byte[] retrievePhoto() {
         return null;
+    }
+
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 }

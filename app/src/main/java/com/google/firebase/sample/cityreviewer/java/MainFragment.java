@@ -58,6 +58,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -89,7 +90,7 @@ public class MainFragment extends Fragment implements
     private ActivityResultLauncher<Intent> signinLauncher;
     private MainActivityViewModel mViewModel;
 
-    private Set<String> uniqueCountries;
+    private ArrayList<String> uniqueCountries;
     private MenuHost menuHost;
 
     public void onCreate(Bundle savedInstanceState){
@@ -160,7 +161,7 @@ public class MainFragment extends Fragment implements
 
         mBinding.recyclerCities.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.recyclerCities.setAdapter(mAdapter);
-        uniqueCountries = new HashSet<>();
+        uniqueCountries = new ArrayList<String>();
         uniqueCountries.add("All countries");
         populateCountrySet();
 
@@ -178,8 +179,11 @@ public class MainFragment extends Fragment implements
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                uniqueCountries.add(document.getData().get("CountryName").toString());
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                String newCountry = document.getData().get("CountryName").toString();
+                                if (!uniqueCountries.contains(newCountry)){
+                                    uniqueCountries.add(newCountry);
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                }
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -388,6 +392,7 @@ public class MainFragment extends Fragment implements
             DocumentReference cityRef = mFirestore.collection("cities").document();
             City cityReview = CityUtil.getRandom(requireContext());
             System.err.println("CITY DOCS:" + cityReview.getCity() + cityReview.getCountry());
+            cityReview.setTimeCreated(new Date());
             batch.set(cityRef, cityReview);
             if (!uniqueCountries.contains(cityReview.getCountry())){
                 addNewCountry(cityReview.getCountry());
@@ -474,6 +479,7 @@ public class MainFragment extends Fragment implements
         cityData.put("description", city.getDescription());
         cityData.put("UID", city.getUID());
         cityData.put("author", city.getAuthor());
+        cityData.put("timeCreated", new Date());
 
         WriteBatch batch = mFirestore.batch();
         batch.set(cityRef, cityData);

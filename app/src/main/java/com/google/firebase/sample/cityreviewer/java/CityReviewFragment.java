@@ -148,6 +148,7 @@ public class CityReviewFragment extends Fragment
         mBinding.cityReviewCountry.setText(cityData.get("country").toString());
         mBinding.cityReviewAuthor.setText(cityData.get("author").toString());
         mBinding.cityReviewDescription.setText(cityData.get("description").toString());
+        // TODO: Set some city date here
         setPhotoBindingsFromStorage((ArrayList<String>) cityData.get("photoURLs"));
 
         ArrayList<String> photoDescriptions = (ArrayList<String>) cityData.get("photoDescriptions");

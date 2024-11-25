@@ -17,6 +17,7 @@ import com.google.firebase.sample.cityreviewer.databinding.DialogFiltersBinding;
 import com.google.firebase.sample.cityreviewer.java.model.City;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ import java.util.Set;
 public class FilterDialogFragment extends DialogFragment implements View.OnClickListener {
 
     public static final String TAG = "FilterDialog";
-    public Set<String> countryList;
+    public ArrayList<String> countryList;
 
     interface FilterListener {
 
@@ -40,8 +41,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     private ArrayAdapter<String> countryAdapter;
     private FilterListener mFilterListener;
 
-    public FilterDialogFragment(Set<String> countrySet){
-        this.countryList = countrySet;
+    public FilterDialogFragment(ArrayList<String> countryList){
+        this.countryList = countryList;
     }
 
     @Nullable
@@ -61,8 +62,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     // Sets contents of country dropdown dynamically
     public void updateCountrySpinner(){
         Spinner countryOptions = (Spinner) this.mBinding.getRoot().findViewById(R.id.spinnerCountry);
-        List<String> countries = Arrays.asList(Arrays.copyOf(this.countryList.toArray(), this.countryList.size(), String[].class));
-        countryAdapter = new ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, countries);
+        countryAdapter = new ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, this.countryList);
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countryOptions.setAdapter(countryAdapter);
     }
@@ -129,6 +129,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             return City.FIELD_RATING;
         } if (getString(R.string.sort_by_author).equals(selected)) {
             return City.FIELD_AUTHOR;
+        } if (getString(R.string.sort_by_date).equals(selected)){
+            return City.FIELD_TIME;
         }
 
         return null;
@@ -137,10 +139,16 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     @Nullable
     private Query.Direction getSortDirection() {
         String selected = (String) mBinding.spinnerSort.getSelectedItem();
+
         if (getString(R.string.sort_by_rating).equals(selected)) {
             return Query.Direction.DESCENDING;
-        } if (getString(R.string.sort_by_author).equals(selected)) {
+        }
+        if (getString(R.string.sort_by_author).equals(selected)) {
             return Query.Direction.ASCENDING;
+        }
+
+        if (getString(R.string.sort_by_date).equals(selected)){
+            return Query.Direction.DESCENDING;
         }
 
         return null;

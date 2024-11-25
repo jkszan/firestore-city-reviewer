@@ -50,7 +50,7 @@
         android:layout_marginEnd="9dp"
         app:layout_constraintBottom_toBottomOf="@+id/CityFilterText"
         app:layout_constraintEnd_toStartOf="@+id/CityFilterText"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/icon_country"
         app:layout_constraintTop_toTopOf="@+id/CityFilterText"
         app:srcCompat="@drawable/ic_place_white_24px"
         app:tint="@color/greySecondary" />
@@ -64,7 +64,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/spinnerSort"
         app:layout_constraintEnd_toStartOf="@+id/spinnerSort"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/icon_city"
         app:layout_constraintTop_toTopOf="@+id/spinnerSort"
         app:srcCompat="@drawable/ic_sort_white_24px"
         app:tint="@color/greySecondary" />

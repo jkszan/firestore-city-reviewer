@@ -16,7 +16,6 @@ public class Filters {
     private String city = null;
     private String country = null;
     private String author = null;
-
     private String sortBy = null;
     private Query.Direction sortDirection = null;
 
@@ -24,10 +23,10 @@ public class Filters {
 
     public static Filters getDefault() {
         Filters filters = new Filters();
-        filters.setSortBy(City.FIELD_RATING);
+        filters.setSortBy(City.FIELD_TIME);
         filters.setSortDirection(Query.Direction.DESCENDING);
 
-        return filters;//testing
+        return filters;
     }
 
     public boolean hasCountry() {
@@ -128,7 +127,7 @@ public class Filters {
         } else if (City.FIELD_AUTHOR.equals(sortBy)) {
             return context.getString(R.string.sorted_by_author);
         } else {
-            return context.getString(R.string.sorted_by_rating);
+            return context.getString(R.string.sorted_by_date);
         }
     }
 }
