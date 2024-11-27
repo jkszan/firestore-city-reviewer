@@ -481,7 +481,7 @@ public class MainFragment extends Fragment implements
         if (photos.length > 0){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             photos[0].compress(Bitmap.CompressFormat.PNG, 25, outputStream);
-            StorageReference fullImageRef = imageRef.child(city.getAuthor()+"/"+city.getCity()+"/icon");
+            StorageReference fullImageRef = imageRef.child("cityPhotos/"+city.getUID()+"/"+city.getCity()+"/icon");
             fullImageRef.putBytes(outputStream.toByteArray());
             city.setIconPath(fullImageRef.getPath());
         }
@@ -489,7 +489,7 @@ public class MainFragment extends Fragment implements
         for (Bitmap photo: photos){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            StorageReference fullImageRef = imageRef.child(city.getAuthor()+"/"+city.getCity()+"/"+photoUrls.size());
+            StorageReference fullImageRef = imageRef.child("cityPhotos/" + city.getUID()+"/"+city.getCity()+"/"+photoUrls.size());
             fullImageRef.putBytes(outputStream.toByteArray());
             photoUrls.add(fullImageRef.getPath());
         }

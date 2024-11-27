@@ -20,28 +20,34 @@ public class  MainActivity extends AppCompatActivity {
 
     private FirebaseFirestoreSettings settings;
 
+    private final boolean USE_EMULATOR = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         if (auth == null){
             auth = FirebaseAuth.getInstance();
-            auth.useEmulator("10.0.2.2", 9099);
         }
 
         if (firestore == null){
             firestore = FirebaseFirestore.getInstance();
-            firestore.useEmulator("10.0.2.2", 8080);
+
             FirebaseFirestore.setLoggingEnabled(true);
         }
         if (storage == null) {
             storage = FirebaseStorage.getInstance();
-            storage.useEmulator("10.0.2.2", 9199);
         }
         if (settings == null) {
             settings = new FirebaseFirestoreSettings.Builder()
                     .build();
             firestore.setFirestoreSettings(settings);
+        }
+
+        if (USE_EMULATOR){
+            auth.useEmulator("10.0.2.2", 9099);
+            firestore.useEmulator("10.0.2.2", 8080);
+            storage.useEmulator("10.0.2.2", 9199);
         }
 
         super.onCreate(savedInstanceState);
