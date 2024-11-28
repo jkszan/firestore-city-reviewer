@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toStartOf="@+id/spinnerCountry"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/spinnerCountry"
-        app:srcCompat="@drawable/ic_place_white_24px"
+        app:srcCompat="@drawable/globe_24px"
         app:tint="@color/greySecondary" />
 
     <Spinner
@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toStartOf="@+id/CityFilterText"
         app:layout_constraintStart_toStartOf="@+id/icon_country"
         app:layout_constraintTop_toTopOf="@+id/CityFilterText"
-        app:srcCompat="@drawable/ic_place_white_24px"
+        app:srcCompat="@drawable/city_24px"
         app:tint="@color/greySecondary" />
 
     <!-- Price -->

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -149,7 +150,18 @@ public class CityReviewFragment extends Fragment
         mBinding.cityReviewAuthor.setText(cityData.get("author").toString());
         mBinding.cityReviewDescription.setText(cityData.get("description").toString());
         // TODO: Set some city date here
-        setPhotoBindingsFromStorage((ArrayList<String>) cityData.get("photoURLs"));
+        ArrayList<String> photoURLs = (ArrayList<String>) cityData.get("photoURLs");
+        setPhotoBindingsFromStorage(photoURLs);
+
+        if (photoURLs.size() < 3){
+            mBinding.photolayout3.setVisibility(View.GONE);
+        }
+        if (photoURLs.size() < 2){
+            mBinding.photolayout2.setVisibility(View.GONE);
+        }
+        if (photoURLs.isEmpty()){
+            mBinding.photolayout1.setVisibility(View.GONE);
+        }
 
         ArrayList<String> photoDescriptions = (ArrayList<String>) cityData.get("photoDescriptions");
 
