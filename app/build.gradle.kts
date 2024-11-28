@@ -1,11 +1,19 @@
 plugins {
-    id("com.android.application")
+    id("com.android.application") version "8.7.2" apply true
     id("kotlin-android")
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs")
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("/Users/jacobkszan/SHA Key")
+            storePassword = "12345678"
+            keyPassword = "12345678"
+            keyAlias = "app-rel"
+        }
+    }
     namespace = "com.google.firebase.sample.cityreviewer"
     testBuildType = "release"
     compileSdk = 35

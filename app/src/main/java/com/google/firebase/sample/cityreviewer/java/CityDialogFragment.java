@@ -16,7 +16,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.PlayGamesAuthCredential;
+import com.google.firebase.auth.PlayGamesAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.sample.cityreviewer.R;
 import com.google.firebase.sample.cityreviewer.databinding.DialogCityRatingBinding;
 import com.google.firebase.sample.cityreviewer.java.model.City;
@@ -124,10 +130,20 @@ public class CityDialogFragment extends DialogFragment implements View.OnClickLi
             imageDescriptions[1] = mBinding.image2Description.getText().toString();
             imageDescriptions[2] = mBinding.image3Description.getText().toString();
 
+            FirebaseUser author = FirebaseAuth.getInstance().getCurrentUser();
+            String uid = author.getUid();
+            String displayName = author.getDisplayName();
+            if (displayName == null){
+                for (UserInfo profile : author.getProviderData()) {
+                    if (displayName == null && profile.getDisplayName() != null) {
+                        displayName = profile.getDisplayName();
+                    }
+                }
+            }
 
             City city = new City(
-                    FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                    FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                    uid,
+                    displayName,
                     mBinding.cityCity.getText().toString(),
                     mBinding.cityCountryText.getText().toString(),
                     mBinding.cityRating.getRating(),

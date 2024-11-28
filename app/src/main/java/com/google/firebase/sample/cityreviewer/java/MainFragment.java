@@ -80,7 +80,6 @@ public class MainFragment extends Fragment implements
 
     private FirebaseStorage imageStorage;
     private Query mQuery;
-
     private FilterDialogFragment mFilterDialog;
 
     private CityDialogFragment mReviewDialog;
@@ -368,7 +367,8 @@ public class MainFragment extends Fragment implements
     private void startSignIn() {
         // Sign in with FirebaseUI
         Intent intent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build()
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build()
         )).setIsSmartLockEnabled(false)
         .setTheme(R.style.AppTheme) //TODO: Fix this to include Sign-in banner
         .build();

@@ -12,7 +12,20 @@
           "package_name": "com.google.firebase.sample.cityreviewer"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "419893229562-q61kb9564llt8s05q2dcht1q7n9m55aa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.firebase.sample.cityreviewer",
+            "certificate_hash": "0ad694b9362057782066b65a2cfcdf1707cc8f8c"
+          }
+        },
+        {
+          "client_id": "419893229562-8irbbdlnp3p51414aq7pjfd3qvtm9mnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAFMxFPEOQvr2Nfd2Pq5E1qBZOWj6533kE"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419893229562-8irbbdlnp3p51414aq7pjfd3qvtm9mnr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
