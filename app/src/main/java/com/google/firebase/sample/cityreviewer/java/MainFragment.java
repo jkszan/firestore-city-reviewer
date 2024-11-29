@@ -33,6 +33,7 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,6 +52,7 @@ import com.google.firebase.sample.cityreviewer.java.util.CityUtil;
 import com.google.firebase.sample.cityreviewer.java.viewmodel.MainActivityViewModel;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -61,7 +63,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 
 public class MainFragment extends Fragment implements
@@ -231,10 +232,7 @@ public class MainFragment extends Fragment implements
         //need to use if/else:
 
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_add_items) {
-            //onAddItemsClicked(); //TODO: Either re-enable or remove from UI
-            return true;
-        } else if (itemId == R.id.menu_sign_out) {
+        if (itemId == R.id.menu_sign_out) {
             //FirebaseAuth.getInstance().signOut();
             AuthUI.getInstance().signOut(requireContext());
             startSignIn();
@@ -312,7 +310,6 @@ public class MainFragment extends Fragment implements
         query = query.whereGreaterThanOrEqualTo(field, pattern);
         query = query.whereLessThan(field, patternBound);
         return query;
-
     }
 
     @Override
@@ -366,9 +363,10 @@ public class MainFragment extends Fragment implements
 
     private void startSignIn() {
         // Sign in with FirebaseUI
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder().requestEmail().requestProfile().build();
         Intent intent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build()
+                new AuthUI.IdpConfig.GoogleBuilder().setSignInOptions(options).build()
         )).setIsSmartLockEnabled(false)
         .setTheme(R.style.AppTheme) //TODO: Fix this to include Sign-in banner
         .build();
@@ -383,31 +381,6 @@ public class MainFragment extends Fragment implements
         newCountry.set(countryRef, new HashMap<>());
         newCountry.commit();
         uniqueCountries.add(country);
-    }
-
-    private void onAddItemsClicked(){
-        WriteBatch batch = mFirestore.batch();
-        for (int i = 0; i < 10; i++) {
-            DocumentReference cityRef = mFirestore.collection("cities").document();
-            City cityReview = CityUtil.getRandom(requireContext());
-            System.err.println("CITY DOCS:" + cityReview.getCity() + cityReview.getCountry());
-            cityReview.setTimeCreated(new Date());
-            batch.set(cityRef, cityReview);
-            if (!uniqueCountries.contains(cityReview.getCountry())){
-                addNewCountry(cityReview.getCountry());
-            }
-        }
-
-        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "Write batch succeeded.");
-                } else {
-                    Log.w(TAG, "write batch failed.", task.getException());
-                }
-            }
-        });
     }
 
     private void showSignInErrorDialog(@StringRes int message) {
@@ -480,7 +453,7 @@ public class MainFragment extends Fragment implements
 
         if (photos.length > 0){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            photos[0].compress(Bitmap.CompressFormat.PNG, 25, outputStream);
+            photos[0].compress(Bitmap.CompressFormat.JPEG, 10, outputStream);
             StorageReference fullImageRef = imageRef.child("cityPhotos/"+city.getUID()+"/"+city.getCity()+"/icon");
             fullImageRef.putBytes(outputStream.toByteArray());
             city.setIconPath(fullImageRef.getPath());
@@ -488,7 +461,7 @@ public class MainFragment extends Fragment implements
 
         for (Bitmap photo: photos){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            photo.compress(Bitmap.CompressFormat.JPEG, 40, outputStream);
             StorageReference fullImageRef = imageRef.child("cityPhotos/" + city.getUID()+"/"+city.getCity()+"/"+photoUrls.size());
             fullImageRef.putBytes(outputStream.toByteArray());
             photoUrls.add(fullImageRef.getPath());
@@ -510,7 +483,7 @@ public class MainFragment extends Fragment implements
         cityData.put("description", city.getDescription());
         cityData.put("UID", city.getUID());
         cityData.put("author", city.getAuthor());
-        cityData.put("timeCreated", new Date());
+        cityData.put("timeCreated", FieldValue.serverTimestamp());
 
         WriteBatch batch = mFirestore.batch();
         batch.set(cityRef, cityData);
