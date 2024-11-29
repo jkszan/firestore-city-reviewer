@@ -238,6 +238,9 @@ public class MainFragment extends Fragment implements
             startSignIn();
             return true;
         } else if (itemId == R.id.menu_write_review) {
+            if (shouldStartSignIn()){
+                startSignIn();
+            }
             onWriteReviewClicked();
         }
         return false;
@@ -287,6 +290,8 @@ public class MainFragment extends Fragment implements
     @Override
     public void onDeleteCityClicked(DocumentSnapshot city) {
         String documentPath = city.getReference().getPath();
+        String storagePath = "/cityPhotos/" + city.get("UID")+"/"+city.get("city") + "/";
+
         mFirestore.document(documentPath)
             .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -301,6 +306,17 @@ public class MainFragment extends Fragment implements
                         Log.w(TAG, "Failed to delete document", e);
                     }
                 });
+
+        StorageReference store = imageStorage.getReference();
+        ArrayList<String> photoURLs = (ArrayList<String>) city.get("photoURLs");
+        for (int i = 0; i < photoURLs.size(); i++) {
+            StorageReference imageRef = store.child(storagePath + i);
+            imageRef.delete();
+        }
+        if (!photoURLs.isEmpty()) {
+            StorageReference iconRef = store.child(storagePath + "icon");
+            iconRef.delete();
+        }
     }
 
     private Query startsWith(Query query, String field, String pattern){
@@ -354,9 +370,8 @@ public class MainFragment extends Fragment implements
 
     private boolean shouldStartSignIn() {
         FirebaseUser curUser = FirebaseAuth.getInstance().getCurrentUser();
-        System.err.println("USER ID:" + curUser);
-        if (curUser != null){
-            System.err.println("Email:" + curUser.getEmail());
+        if (curUser != null) {
+            System.err.println("Currently Signed in User ID:" + curUser.getUid() + ", Name:" + curUser.getDisplayName());
         }
         return (!mViewModel.getIsSigningIn() && FirebaseAuth.getInstance().getCurrentUser() == null);
     }
@@ -368,7 +383,7 @@ public class MainFragment extends Fragment implements
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().setSignInOptions(options).build()
         )).setIsSmartLockEnabled(false)
-        .setTheme(R.style.AppTheme) //TODO: Fix this to include Sign-in banner
+        .setTheme(R.style.AppTheme_EntryChoice) //TODO: Fix this to include Sign-in banner
         .build();
 
         signinLauncher.launch(intent);
