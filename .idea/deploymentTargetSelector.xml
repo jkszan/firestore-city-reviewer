@@ -10,7 +10,7 @@
       </SelectionState>
       <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-29T15:26:55.692058Z">
+        <DropdownSelection timestamp="2024-11-29T18:10:05.631861Z">
           <Target type="DEFAULT_BOOT">
             <template>
               <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=panther/33" />

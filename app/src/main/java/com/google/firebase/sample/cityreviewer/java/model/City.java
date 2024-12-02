@@ -35,8 +35,8 @@ public class City {
     public City(String author_uid, String author, String city, String country, float rating, String description, Bitmap[] photos, String[] photoDescriptions) {
         this.author_uid = author_uid;
         this.author = author;
-        this.city = city;
-        this.country = country;
+        this.city = city.trim();
+        this.country = country.trim();
         this.rating = rating;
         this.description = description;
         ArrayList<Bitmap> photoList = new ArrayList<>();
